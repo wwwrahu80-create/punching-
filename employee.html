@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Entry Punching System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .punch-in {
+            background: #28a745;
+        }
+
+        .punch-out {
+            background: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #343a40;
+            color: white;
+        }
+
+        .status {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Office Entry Punching System</h1>
+
+    <div class="form">
+
+        <input type="text" id="employeeName"
+               placeholder="Employee Name">
+
+        <input type="text" id="employeeId"
+               placeholder="Employee ID">
+
+        <button class="punch-in" onclick="punchIn()">
+            Punch In
+        </button>
+
+        <button class="punch-out" onclick="punchOut()">
+            Punch Out
+        </button>
+
+    </div>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Punch In</th>
+                <th>Punch Out</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="attendanceTable">
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+let currentRow = null;
+
+function getDateTime() {
+
+    const now = new Date();
+
+    return {
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+    };
+}
+
+function punchIn() {
+
+    const name = document.getElementById("employeeName").value;
+    const id = document.getElementById("employeeId").value;
+
+    if (name === "" || id === "") {
+        alert("Please enter Employee Name and Employee ID");
+        return;
+    }
+
+    const dateTime = getDateTime();
+
+    const table = document.getElementById("attendanceTable");
+
+    currentRow = table.insertRow();
+
+    currentRow.insertCell(0).innerText = id;
+    currentRow.insertCell(1).innerText = name;
+    currentRow.insertCell(2).innerText = dateTime.date;
+    currentRow.insertCell(3).innerText = dateTime.time;
+    currentRow.insertCell(4).innerText = "-";
+    currentRow.insertCell(5).innerHTML =
+        '<span class="status">Present</span>';
+
+    alert("Punch In Successful!");
+
+}
+
+function punchOut() {
+
+    if (currentRow === null) {
+        alert("Please Punch In first.");
+        return;
+    }
+
+    const dateTime = getDateTime();
+
+    currentRow.cells[4].innerText = dateTime.time;
+
+    alert("Punch Out Successful!");
+
+    currentRow = null;
+
+}
+
+</script>
+
+</body>
+</html>
